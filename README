@@ -1,0 +1,119 @@
+Tema : Sistem de facturi fiscale
+
+Nume: Dragan Theodora-Augustina
+Grupa: 324CC
+Dificultate si timp acordat temei : medie, 55h
+
+Pentru task-ul 1, am avut de interpretat si stocat date spre a crea un sistem de
+facturare, iar task-ul 2 a presupus crearea unei interfete grafice, ca 
+utilizatorul sa interactioneze cu sistemul creat anterior.
+
+La 1, am creat urmatoarele clase: 
+Produs --> contine datele unui produs descrise in produse.txt
+ProdusComandat --> contine datele unui produs aflat intr-o factura
+Factura --> contine datele si metodele specifice unei facturi, preluata din
+	facturi.txt
+FacturaComparator --> implementeaza clasa Comparator, folosita pentru a ordona
+facturile unui magazin avand in vedere suma totala a acestora
+IMagazin --> interfata ce descrie functiile specifice unui magazin
+Magazin --> clasa abstracta, implementeaza functiile specifice oricarui tip de 
+	magazin si contine antetul pentru cele specifice fiecarui tip
+MiniMarket, MediumMarket si HyperMarket --> clase ce implementeaza un tip de
+	magazin
+Factory --> clasa ce creeaza magazine la citire (apelata in Gestiune).Ea foloseste
+	Factory Design Pattern, adica in functie de input, se creeaza un anume tip
+	de magazin (se foloseste DownCasting) 
+Gestiune --> este implementata folosind Singleton Design Pattern, adica poate fi
+	instantiata o singura data. In cadrul ei sunt implementate metodele ce fac
+	legatura intre facturi, produse si taxe si tot in cadrul ei este creat
+	output.txt.
+MagazinComparator --> implementeaza Comparator si este folosit la ordonarea
+	magazinelor in cadrul clasei Gestiune, in functie de suma lor totala
+
+	Contine:
+	un Vector<String> tari, pentru a retine tarile din care provin produsele.
+	un ArrayList<Produs> produse, in care retin produsele descrise de produs.txt.
+El este creat de functia citesteProduse() : functia contine o bucla pentru a citi
+fiecare linie si o bucla in cadrul acesteia pentru a crea un Produs pentru fiecare
+tara existenta in Vectorul tari.
+	un HashMap<String, HashMap<String,double>> taxe, in care sunt retinute taxele
+fiecarei tari aplicate tuturor categoriilor, notate ca procente. Este creat prin
+functia citesteTaxe(). In cadrul ei, dupa ce citesc tarile, creez micile hashmaps
+pentru fiecare tara, adaugand practic cate o pereche (tara, dictionar de taxe) in
+ dictionarul mare, pe rand.	
+	un ArrayList<Magazin> magazine, creat in urma procesarii fisierului 
+facturi.txt, prin functia creareMagazine(). In cadrul ei, citesc printr-o bucla 
+cate un magazin si tipul sau, iar apoi creez vectorul de facturi din cadrul magazinului respectiv.
+Cand termin, adaug magazinul creat vectorului de magazine si reiterez.
+	functia creareFisier() creeaza outputulmeu.txt, fisierul de output creat de
+mine. L-am denumit diferit fata de cel din anexa temei pentru a putea compara
+rezultatele, fiind necesar sa nu suprascriu. Pentru cele 3 tipuri de magazin, am
+parcurs vectorul de magazine si am ales magazinele de un tip anume, listandu-le
+ordonat facturile.
+	o functie main, in care se instantiaza Gestiune si se creeaza output-ul.
+Tipurile de date au fost alese avand in vedere functiile oferite de ArrayList si
+HashMap si datorita folosirii lor in cadrul laboratoarelor, intrucat m-am acomodat
+cu ele si le-am inteles logica. 
+
+
+
+La task-ul 2, am creat urmatoarele clase:
+	AdministrareProduse, in care am instantiat un obiect de tip Gestiune si am creat:
+	--> clasele MyComparator si MyComparator2, folosite pentru a sorta toate produsele
+in functie de denumire si, respectiv, de tara, in functiile : ordineDenumire() si
+ordineTara() si a intoarce un string cu produsele in ordine, ce va fi inserat intr-un
+obiect de tip textfield in pagina de statistici
+
+	Statistici, in care am instantiat un obiect de tip Gestiune si am creat:
+	--> clasa MyComparatorMagazin, care este folosita pentru a ordona magazinele
+in functie de totalulCuTaxe
+	--> functia celeMaiMariVanzari, care returneaza magazinul cu cele mai mari vanzari
+	--> functia magazinPeTara, care returneaza magazinul cu cele mai multe vanzari catre
+tara data ca parametru
+	--> functia toateTarile, care aplica fiecarei tari functia magazinPeTara si 
+returneaza un string cu toate perechile ( tara, magazin cu vanzari maxime)
+	--> functia ceaMaiMareFactura, care returneaza factura cu cel mai mare cost
+	--> functia magazinPeCategorie, care returneaza magazinul cu cele mai multe 
+vanzari a categoriei data ca parametru
+	--> functia toateCategoriile, care aplica fiecarei tari functia magazinPeCategorie
+si returneaza un string cu toate perechile ( categorie, magazin cu vanzari maxime)
+
+	FereastraMeniu
+	--> clasa cu functia main, ce porneste aplicatia
+	--> aceasta creeaza fereastra de meniu si instantiaza celelalte ferestre
+	--> implementeaza actionListener, astfel incat la apasarea fiecarui buton,
+se "ascunde" meniul si se face vizibila fereastra corespunzatoare butonului apasat.
+Aceasta schimbare este implementata in functia actionPerformed
+
+	FereastraAdministrare
+	--> instantiaza un obiect de tip AdministrareProduse
+	--> este impartita in Panels,prin JSplit panel
+	--> Fiecare panel implementeaza o functionalitate a acestei ferestre
+	--> cand se apasa butoanele, se preiau datele oferite de utilizator si se
+realizeaza prelucrarea produselor : afisare, adaugare sau stergere, apeland functiile
+din AdministrareProduse cu parametrii preluati din campurile / butoanele actionate
+de user
+	--> aici, functiile de adaugare si stergere updateaza fisierul produse.txt
+	--> in cazul apasarii butonului inapoi, se instantiaza o noua fereastra de meniu,
+se face vizibila si se "ascunde" cea de administrare
+
+	FereastraStatistici
+	--> instantiaza un obiect de tip Statistici
+	--> este impartita prin grid layout, cu butoane si textfields 
+	--> la actionarea butonului pentru statistica dorita, se afiseaza in textfield-ul
+alaturat rezultatul, prin apelarea functiilor din Statistici
+	--> in cazul apasarii butonului inapoi, se instantiaza o noua fereastra de meniu,
+se face vizibila si se "ascunde" cea de statistici
+
+	FereastraIncarcare
+	--> foloseste obiecte de tip JFileChooser, pentru a oferi utilizatorului posi-
+bilitatea de a incarca fisiere, in urma apasarii butonului corepunzator tipului de
+fisier dorit
+	--> verifica daca fisierul este bine ales si, in caz contrar, afiseaza o fereastra
+de eroare
+	--> in cazul apasarii butonului inapoi, se instantiaza o noua fereastra de meniu,
+se face vizibila si se "ascunde" cea de statistici
+
+	Disclaimer : 
+	cu cale relativa nu mergea in nici un fel, asa ca am folosit cai absolute
+pentru fisiere.
